@@ -1,10 +1,6 @@
-# This is the minimum required version of CMake to build this project.
 cmake_minimum_required(VERSION 3.10)
+project(ATM)
 
-# This command sets the name of the project and specifies the languages used.
-project(ATM C CXX)
-
-# This sets the C++ standard to be used by the project to C++20.
 set(CMAKE_CXX_STANDARD 11)
 
 # This sets the working directory to the current source directory.
@@ -16,8 +12,16 @@ file(GLOB SOURCES "sources/*.cpp")
 # This command includes the "headers" directory so that the compiler can find header files located there.
 include_directories("${WORKING_DIRECTORY}/headers")
 
-# This command creates an executable with the name of the project (RPS) and includes the main.cpp file and all source files collected in the SOURCES variable.
+# Include the sqlite directory
+include_directories("${WORKING_DIRECTORY}/sqlite")
+
+# Add sqlite source files, excluding shell.c
+file(GLOB SQLITE_SOURCES "sqlite/*.c" "sqlite/*.cpp")
+list(REMOVE_ITEM SQLITE_SOURCES "${WORKING_DIRECTORY}/sqlite/shell.c")
+
+# This command creates an executable with the name of the project (ATM) and includes the main.cpp file and all source files collected in the SOURCES variable.
 add_executable(${PROJECT_NAME}
-main.cpp
-${SOURCES}
+    main.cpp
+    ${SOURCES}
+    ${SQLITE_SOURCES}
 )
