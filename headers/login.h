@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include "home.h"
 
 #ifndef LOGIN_H
 #define LOGIN_H
@@ -19,7 +20,7 @@ public:
     ~login();
     void run();
     bool userExists(const std::string& username);
-    bool verifyPincode(const std::string& username, const std::string& pincode);
+    bool verifyPincode(const std::string& username, const std::string& pincode, const std::string& id);
 };
 
 #endif

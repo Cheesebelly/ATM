@@ -16,7 +16,7 @@ users::~users()
 
 void users::run()
 {
-      const char *sql = "SELECT * FROM users";
+    const char *sql = "SELECT * FROM users";
     int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
         std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
@@ -29,6 +29,7 @@ void users::run()
         std::cout << "achternaam: " << sqlite3_column_text(stmt, 2) << std::endl;
         std::cout << "Pincode: " << sqlite3_column_int(stmt, 3) << std::endl;
     }
-
+        login* l = new login();
+        l->run();
     sqlite3_finalize(stmt);
 }

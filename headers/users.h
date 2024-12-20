@@ -1,5 +1,6 @@
 #include <sqlite3.h>
 #include <iostream>
+#include "login.h"
 class users
 {
 private:

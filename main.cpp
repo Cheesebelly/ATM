@@ -1,6 +1,7 @@
 #include "sqlite/sqlite3.h"
 #include "users.h"
 #include "login.h"
+#include "home.h"
 #include <iostream>
 #include <string>
 using namespace std;
