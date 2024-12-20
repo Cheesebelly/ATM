@@ -1,13 +1,13 @@
 #include <sqlite3.h>
 #include <iostream>
-class users
+class login
 {
 private:
     sqlite3 *db;
     sqlite3_stmt *stmt;
     std::string input;
 public:
-    users(const std::string& input);
-    ~users();
+    login(/* args */);
+    ~login();
     void run();
 };
