@@ -1,6 +1,7 @@
 #include <sqlite3.h>
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 
 #ifndef LOGIN_H
@@ -18,6 +19,7 @@ public:
     ~login();
     void run();
     bool userExists(const std::string& username);
+    bool verifyPincode(const std::string& username, const std::string& pincode);
 };
 
 #endif

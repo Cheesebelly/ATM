@@ -1,6 +1,6 @@
 #include "login.h"
 
-std::unordered_set<std::string> userDatabase = {"user1", "user2", "user3"};
+std::unordered_map<std::string, std::string> userDatabase;
 
 login::login(/* args */)
 {
@@ -20,20 +20,33 @@ login::~login()
 bool login::userExists(const std::string& username){
     return userDatabase.find(username) != userDatabase.end();
 }
+bool login::verifyPincode(const std::string& username, const std::string& pincode){
+    auto it = userDatabase.find(username);
+    if (it != userDatabase.end()){
+        return it->second == pincode;
+    }
+    return false;
+}
 
 void login::loadUsersFromDatabase()
 {
-const  char* sql = "SELECT gebruiker, pincode FROM users";
-    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK)
-    {
-        std::cerr << "Error preparing statement!" << std::endl;
+    const char* sql = "SELECT gebruiker, pincode FROM users";
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to fetch data: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
-    while (sqlite3_step(stmt) == SQLITE_ROW)
-    {
-        const char* username = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
-        const char* pincode = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
-        userDatabase.insert(username);
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        const unsigned char* usernameText = sqlite3_column_text(stmt, 0);
+        const unsigned char* pincodeText = sqlite3_column_text(stmt, 1);
+
+        if (usernameText && pincodeText) {
+            std::string username = reinterpret_cast<const char*>(usernameText);
+            std::string pincode = reinterpret_cast<const char*>(pincodeText);
+            userDatabase[username] = pincode;
+        } else {
+            std::cerr << "Null value encountered in database row." << std::endl;
+        }
     }
 
     sqlite3_finalize(stmt);
@@ -45,10 +58,16 @@ void login::run()
     std::cout << "Enter username: ";
     std::cin >> username;
 
-    login loginInstance;
-    if (loginInstance.userExists(username))
+    if (userExists(username))
     {
-        std::cout << "User exists!" << std::endl;
+        std::string pincode;
+        std::cout << "Enter pincode: ";
+        std::cin >> pincode;
+        if(verifyPincode(username, pincode)){
+            std::cout << "Login successful!" << std::endl;
+        } else {
+            std::cout << "Invalid pincode!" << std::endl;
+        }
     } else {
         std::cout << "User does not exist!" << std::endl;
     }
