@@ -2,7 +2,7 @@
 
 users::users(const std::string& input) : input(input), db(nullptr), stmt(nullptr)
 {
- int rc = sqlite3_open("E:\\CPP\\ATM\\atm.db", &db);
+ int rc = sqlite3_open("../atm.db", &db);
     if (rc) {
         std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
         return;

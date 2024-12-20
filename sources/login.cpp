@@ -4,7 +4,7 @@ std::unordered_map<std::string, std::string> userDatabase;
 
 login::login(/* args */)
 {
-    if (sqlite3_open("E:\\CPP\\ATM\\atm.db", &db) != SQLITE_OK)
+    if (sqlite3_open("../atm.db", &db) != SQLITE_OK)
     {
         std::cerr << "Error opening database!" << std::endl;
     } else {
